@@ -1,0 +1,10 @@
+[Unit]
+Description=share-VBox-VM to fix VM permissions.
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'exec "/usr/local/sbin/share-VBox-VM.sh"' 
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
