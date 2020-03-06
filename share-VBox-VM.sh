@@ -1,6 +1,7 @@
 #!/bin/bash
 # $Id$
 # $Revision$
+# $Tags$
 
 # Send all output to a log
 exec >"/var/log/$(basename "${0%.*}").log" 2>&1

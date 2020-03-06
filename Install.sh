@@ -1,6 +1,7 @@
 #!/bin/bash
 # $Id$
 # $Revision$
+# $Tags$
 
 # DEBUG flag. 0=On 
 DEBUG () { return 1; }
