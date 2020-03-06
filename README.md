@@ -10,4 +10,6 @@ Execute `Install.sh` as the VM primary owner.
 
 ## Version
 
-###### $Id$<br>$Revision$<br>$Tags$
+    $Id$
+    $Revision$
+    $Tags$
