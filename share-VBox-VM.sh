@@ -1,4 +1,7 @@
 #!/bin/bash
+# Change the owner and group of a VM to a common user and shared group
+# and then set the group permissions to the same as owner
+#
 # $Id$
 # $Revision$
 # $Tags$
@@ -7,14 +10,24 @@
 exec >"/var/log/$(basename "${0%.*}").log" 2>&1
 
 # Define locations
-: ${VBOX_VM_USER:="macosuser:vboxusers"}
-: ${VBOX_VM_HOME:="/home/macosuser/VM Images"}
-: ${VBOX_VM_SHARE_PID:="/var/run/user/$(id -u)/$(basename "${0%.*}").pid"}
+: ${VBOX_VM_USER:="$1"}
+: ${VBOX_VM_HOME:="$2"}
+: ${VBOX_VM_SHARE_PID:="/var/run/$(basename "${0%.*}")/pid"}
 : ${VBOX_VM_SHARE_INTERVAL:=2}
 : ${VBOX_VM_SHARE_FILELIST:='.*/*\.(vbox|vmdk|vdi|vhd|nvram)'}
 
+# Make sure there are values for params that don't default to something
+if [ -z "$VBOX_VM_USER" ] || [ -z "$VBOX_VM_HOME" ]; then
+  cat <<EOS >&2
+VBOX_VM_USER and/or VBOX_VM_HOME are not set.  Specify them 
+Usage: [<envar>=<value> ...] $(basename "$0") [<VBOX_VM_USER> [<VBOX_VM_HOME>]]
+EOS
+  exit 1
+fi
+
 # Quit if this is already running
-ps -p $(cat "$VBOX_VM_SHARE_PID" 2>&1) && exit 1
+ps -p $(cat "$VBOX_VM_SHARE_PID" 2>&1) && exit 2
+mkdir -p "$(dirname "$VBOX_VM_SHARE_PID")" || exit 3
 echo $$ > "$VBOX_VM_SHARE_PID"
 
 # Loop forever
